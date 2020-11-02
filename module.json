@@ -1,0 +1,33 @@
+
+{
+	"comment": "Module definition file.",
+	"name": "test",
+	"description": "A module for testing the appserver functionality.",
+	"files": [],
+	"routes": {
+        "test/test/one/text":{
+            "callback":"testFunctionOne",
+            "content-type":"text/html"
+        },
+        "test/test/one/json":{
+            "callback":"testFunctionOne",
+            "content-type":"application/json"
+        },
+        "test/test/two/text":{
+            "callback":"testFunctionTwo",
+            "content-type":"text/html"
+        },
+        "test/test/two/json":{
+            "callback":"testFunctionTwo",
+            "content-type":"application/json"
+        },
+        "test/test/three/text":{
+            "callback":"testFunctionThree",
+            "content-type":"text/html"
+        },
+        "test/test/three/json":{
+            "callback":"testFunctionThree",
+            "content-type":"application/json"
+        }
+    }
+}
