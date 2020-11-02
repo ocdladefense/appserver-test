@@ -1,0 +1,14 @@
+{
+    "name": "trevor-uehlin/test-module",
+    "description": "A module for testing the appserver functionality",
+    "type": "wordpress-theme",
+    "authors": [
+        {
+            "name": "Trevor Uehlin",
+            "email": "uehlin.trevor@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/installers":"~1.0"
+    }
+}
