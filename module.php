@@ -1,14 +1,9 @@
 <?php 
 
 class TestModuleModule extends Module{
-    private $deps = array("salesforce");
 
     public function __construct(){
         parent::__construct();
-        $this->routes = $this->testModuleModRoutes();
-        $this->dependencies = $this->deps;
-        $this->name = "testModule";
-        $this->files = array("TestClass.php");
     }
 
     public function testFunctionOne(){
