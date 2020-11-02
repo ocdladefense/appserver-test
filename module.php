@@ -11,36 +11,6 @@ class TestModuleModule extends Module{
         $this->files = array("TestClass.php");
     }
 
-    private function testModuleModRoutes(){
-        $testModuleModRoutes = array(
-            "test-one-text" => array(
-                "callback" => "testFunctionOne",
-                "content-type" => "text/html"
-            ),
-            "test-one-json" => array(
-                "callback" => "testFunctionOne",
-                "content-type" => "application/json"
-            ),
-            "test-two-text" => array(
-                "callback" => "testFunctionTwo",
-                "content-type" => "text/html"
-            ),
-            "test-two-json" => array(
-                "callback" => "testFunctionTwo",
-                "content-type" => "application/json"
-            ),
-            "test-three-text" => array(
-                "callback" => "testFunctionThree",
-                "content-type" => "text/html"
-            ),
-            "test-three-json" => array(
-                "callback" => "testFunctionThree",
-                "content-type" => "application/json"
-            )
-        );
-        return $testModuleModRoutes;
-    }
-
     public function testFunctionOne(){
         return "Hello from the first test function in the module.php file of the test module";
     }
