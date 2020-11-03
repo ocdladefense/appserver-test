@@ -1,6 +1,6 @@
 <?php 
 
-class TestModuleModule extends Module{
+class TestModule extends Module{
 
     public function __construct(){
         parent::__construct();
