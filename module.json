@@ -3,29 +3,21 @@
 	"comment": "Module definition file.",
 	"name": "test",
 	"description": "A module for testing the appserver functionality.",
-	"files": [],
+	"files": ["Test.php"],
 	"routes": {
-        "test/one/text":{
+        "test/1":{
             "callback":"testFunctionOne",
             "content-type":"text/html"
         },
-        "test/one/json":{
+        "test/2":{
             "callback":"testFunctionOne",
             "content-type":"application/json"
         },
-        "test/two/text":{
-            "callback":"testFunctionTwo",
-            "content-type":"text/html"
-        },
-        "test/two/json":{
-            "callback":"testFunctionTwo",
-            "content-type":"application/json"
-        },
-        "test/errors/text":{
+        "test/errors/1":{
             "callback":"testFunctionThree",
             "content-type":"text/html"
         },
-        "test/errors/json":{
+        "test/errors/2":{
             "callback":"testFunctionThree",
             "content-type":"application/json"
         }
