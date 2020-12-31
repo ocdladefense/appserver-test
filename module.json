@@ -5,9 +5,40 @@
 	"description": "A module for testing the appserver functionality.",
 	"files": ["Test.php"],
 	"routes": {
+				"login": {
+            "callback":"login",
+            "content-type":"text/html",
+            "access": true
+				},
+				"logout": {
+            "callback":"login",
+            "content-type":"text/html",
+            "access": true
+				},
+				"user/profile": {
+            "callback":"userProfile",
+            "content-type":"text/html",
+            "access": "is_authenticated"
+				},
+				"user/settings": {
+            "callback":"userSettings",
+            "content-type":"text/html",
+            "access": "is_authenticated"
+				},
+				"user/documents": {
+            "callback":"userDocuments",
+            "content-type":"text/html",
+            "access": "is_authenticated"		
+				},
+				"books-online/%id": {
+            "callback":"loadChapter1",
+            "content-type":"text/html",
+            "access": "is_authenticated"	
+				},
         "test/1":{
             "callback":"testFunctionOne",
-            "content-type":"text/html"
+            "content-type":"text/html",
+            "access": "is_authenticated"
         },
         "test/2":{
             "callback":"testFunctionOne",
