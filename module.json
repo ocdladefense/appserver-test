@@ -51,6 +51,14 @@
         "test/errors/2":{
             "callback":"testFunctionThree",
             "content-type":"application/json"
+        },
+        "test/salesforce/connect":{
+           "callback":"connectToSalesforce",
+           "content-type":"application/json"
+        },
+        "test/attachment/upload":{
+           "callback":"callTestAttachmentUpload",
+           "content-type":"application/json"
         }
     }
 }
