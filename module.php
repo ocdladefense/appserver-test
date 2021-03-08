@@ -251,6 +251,36 @@ class TestModule extends Module {
 		var_dump($resp);
 
 		exit;
+	}
 
+	public function testFileUploadForm(){
+
+		return "<form method='post' action='/test/file/upload/form/callback' enctype='multipart/form-data'>
+					<input type='file' name='jobUpload[]' multiple> 
+					<button id='submit' type='submit'>UPLOAD</button> 
+				</form>";
+	}
+
+	public function testFileUploadFormCallback(){
+
+		$api = $this->loadForceApi("ocdla-sandbox");
+		$parentId = "a1Kj0000000TordEAC";
+
+		$req = $this->getRequest();
+		$fileList = $req->getFiles();
+
+		try{
+			
+			$resp = $api->uploadFiles($fileList, $parentId);
+
+		} catch(Exception $e) {
+
+			print "Just letting you know that something went wrong.";
+		}
+
+
+		var_dump($resp);
+
+		exit;
 	}
 }

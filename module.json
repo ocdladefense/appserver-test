@@ -59,6 +59,14 @@
         "test/attachment/upload":{
            "callback":"callTestAttachmentUpload",
            "content-type":"application/json"
+        },
+        "test/file/upload/form":{
+           "callback":"testFileUploadForm",
+           "content-type":"text/html"
+        },
+        "test/file/upload/form/callback":{
+           "callback":"testFileUploadFormCallback",
+           "content-type":"application/json"
         }
     }
 }
