@@ -278,7 +278,6 @@ class TestModule extends Module {
 			print "Just letting you know that something went wrong.";
 		}
 
-
 		var_dump($resp);
 
 		exit;
