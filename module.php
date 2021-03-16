@@ -3,6 +3,7 @@
 use Http\Http as Http;
 use File\FileList as FileList;
 use File\File as File;
+use Salesforce\SalesforceAttachment as SalesforceAttachment;
 
 class TestModule extends Module {
 
@@ -256,12 +257,40 @@ class TestModule extends Module {
 	public function testFileUploadForm(){
 
 		return "<form method='post' action='/test/file/upload/form/callback' enctype='multipart/form-data'>
-					<input type='file' name='jobUpload[]' multiple> 
+					<input type='file' name='jobUpload[]' multiple>
 					<button id='submit' type='submit'>UPLOAD</button> 
 				</form>";
 	}
 
 	public function testFileUploadFormCallback(){
+
+		//$this->testUploadMultipleFilesAsAttachments();
+		$this->testUploadOneFileAsAttachment();
+		
+	}
+
+	public function testUploadOneFileAsAttachment(){
+
+		// Create an interface that can return the object in a format that is compatable with the simple 0bject endpoint.
+		$api = $this->loadForceApi("ocdla-sandbox");
+		$parentId = "a1Kj0000000TordEAC"; // Two api requests
+
+		$req = $this->getRequest();
+		$fileList = $req->getFiles();
+
+		$path = $fileList->getFirst()->getPath();
+
+		$forceFile = new \SalesforceAttachment($path);
+		$forceFile->setParentId($parentId);
+
+		$resp = $api->uploadFile($forceFile);
+
+		var_dump($resp);
+
+		exit;
+	}
+
+	public function testUploadMultipleFilesAsAttachments(){
 
 		$api = $this->loadForceApi("ocdla-sandbox");
 		$parentId = "a1Kj0000000TordEAC";
@@ -269,17 +298,12 @@ class TestModule extends Module {
 		$req = $this->getRequest();
 		$fileList = $req->getFiles();
 
-		try{
-			
-			$resp = $api->uploadFiles($fileList, $parentId);
-
-		} catch(Exception $e) {
-
-			print "Just letting you know that something went wrong.";
-		}
+		$resp = $api->uploadFiles($fileList, $parentId);
 
 		var_dump($resp);
 
 		exit;
 	}
+
+
 }
