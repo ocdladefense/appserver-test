@@ -4,6 +4,11 @@ use Http\Http as Http;
 use File\FileList as FileList;
 use File\File as File;
 use Salesforce\SalesforceAttachment as SalesforceAttachment;
+use Salesforce\OAuthRequest as OAuthRequest;
+use Http\HttpRequest as HttpRequest;
+use Salesforce\OAuthResponse as OAuthResponse;
+use Salesforce\RestApiRequest as RestApiRequest;
+use Http\HttpHeader as HttpHeader;
 
 class TestModule extends Module {
 
@@ -305,5 +310,56 @@ class TestModule extends Module {
 		exit;
 	}
 
+	public function testWebserverFlowAuthorizationStep(){  // Would this be called something like webserverLogin() ???????????????????????
 
+		$config = getOauthConfig("ocdla-sandbox");
+
+		$resp = OAuthResponse::newWebserverFlow($config);
+
+		return $resp;
+	}
+
+	// Get the access token and save it to the session variables
+
+	public function testWebserverFlowAccessTokenStep(){
+
+		$config = getOauthConfig("ocdla-sandbox");  // Will be in the session or will be the config set as default.
+
+		$code = $_GET["code"];
+
+		$_SESSION["authorization_code"] = $code;  // Is it better to pass this in to from config as an optional parameter or store it in the session?
+
+		// Begin loadForceApi flow.
+		$oauth = OAuthRequest::fromConfig($config);
+
+		$resp = $oauth->authorize();
+
+		$body = json_decode($resp->getBody());
+
+		// Is this in the OauthRequest class somewhere?
+		if($body->error != null){
+
+			throw new Exception("OAUTH_ERROR: {$body->error}, because of an {$body->error_description}.");
+		}
+
+		// Not too sure how important it is to save these to the session.
+		$_SESSION["access_token"] = $body->access_token;
+		$_SESSION["instance_url"] = $body->instance_url;
+
+		$api = new RestApiRequest($body->instance_url, $body->access_token);
+		// End loadForceApi flow.
+
+		//$api = $this->loadForceApi("ocdla-sandbox");
+
+		$result = $api->query("SELECT Id, Name FROM Job__c");
+
+		$job = new stdClass();
+		$job->Name = "Trevor's Test Job";
+
+		$resp = $api->upsert("Job__c", $job);
+
+		var_dump($resp);exit;
+
+		return $resp;
+	}
 }

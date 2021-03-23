@@ -67,6 +67,14 @@
         "test/file/upload/form/callback":{
            "callback":"testFileUploadFormCallback",
            "content-type":"application/json"
+        },
+        "test/webserver/flow/authorization":{
+           "callback":"testWebserverFlowAuthorizationStep",
+           "content-type":"application/json"
+        },
+        "test/webserver/flow/accessToken":{
+           "callback":"testWebserverFlowAccessTokenStep",
+           "content-type":"application/json"
         }
     }
 }
