@@ -9,6 +9,7 @@ use Http\HttpRequest as HttpRequest;
 use Salesforce\OAuthResponse as OAuthResponse;
 use Salesforce\RestApiRequest as RestApiRequest;
 use Http\HttpHeader as HttpHeader;
+use Salesforce\OAuthConfig;
 
 class TestModule extends Module {
 
@@ -159,18 +160,45 @@ class TestModule extends Module {
 		header("Location: /home");
 		exit;
 	}
+
+	public function testAny(){
+
+		$config = getOauthConfig();
+
+		$oc = new OAuthConfig($config);
+
+		var_dump($oc);
+
+		exit;
+	}
 		
 
 		
     public function testFunctionOne() {
-		
-        $list = XList::getDirContents(path_to_modules());
-        
-        print "<pre>".print_r($list,true) ."</pre>";
-        exit;
-        
-        
-        return "Hello from the first test function in the module.php file of the test module";
+
+		$api = $this->loadForceApi();
+
+		$query = "SELECT Id, Name FROM Contact";
+
+		$resp = $api->query($query);
+
+		if(!$resp->isSUccess()){
+
+			$config = getOAuthConfig($this->getInfo()["connectedApp"]);
+			$req = OAuthRequest::refreshAccessTokenRequest($config, "webserver");
+			$resp2= $req->authorize();
+
+			$body = json_decode($resp2->getBody(), true);
+
+			\Session::set($config->getName(), "webserver", "access_token", $body["access_token"]);
+
+			var_dump($resp, $body, $_SESSION);exit;
+
+		}
+
+		var_dump($resp,$req, $_SESSION);
+
+		exit;
     }
 
 
@@ -310,56 +338,10 @@ class TestModule extends Module {
 		exit;
 	}
 
-	public function testWebserverFlowAuthorizationStep(){  // Would this be called something like webserverLogin() ???????????????????????
+	public function testOauth(){
 
-		$config = getOauthConfig("ocdla-sandbox");
+		print "Hello from the test module";
 
-		$resp = OAuthResponse::newWebserverFlow($config);
-
-		return $resp;
-	}
-
-	// Get the access token and save it to the session variables
-
-	public function testWebserverFlowAccessTokenStep(){
-
-		$config = getOauthConfig("ocdla-sandbox");  // Will be in the session or will be the config set as default.
-
-		$code = $_GET["code"];
-
-		$_SESSION["authorization_code"] = $code;  // Is it better to pass this in to from config as an optional parameter or store it in the session?
-
-		// Begin loadForceApi flow.
-		$oauth = OAuthRequest::fromConfig($config);
-
-		$resp = $oauth->authorize();
-
-		$body = json_decode($resp->getBody());
-
-		// Is this in the OauthRequest class somewhere?
-		if($body->error != null){
-
-			throw new Exception("OAUTH_ERROR: {$body->error}, because of an {$body->error_description}.");
-		}
-
-		// Not too sure how important it is to save these to the session.
-		$_SESSION["access_token"] = $body->access_token;
-		$_SESSION["instance_url"] = $body->instance_url;
-
-		$api = new RestApiRequest($body->instance_url, $body->access_token);
-		// End loadForceApi flow.
-
-		//$api = $this->loadForceApi("ocdla-sandbox");
-
-		$result = $api->query("SELECT Id, Name FROM Job__c");
-
-		$job = new stdClass();
-		$job->Name = "Trevor's Test Job";
-
-		$resp = $api->upsert("Job__c", $job);
-
-		var_dump($resp);exit;
-
-		return $resp;
+		exit;
 	}
 }
