@@ -62,22 +62,15 @@
          "callback":"callTestAttachmentUpload",
          "content-type":"application/json"
       },
-      "test/file/upload/form":{
-         "callback":"testFileUploadForm",
-         "content-type":"text/html"
+      "test/my-contacts":{
+         "callback":"showContacts",
+         "content-type":"text/html",
+         "access":"is_authenticated",
+         "authorization":"webserver"
       },
-      "test/file/upload/form/callback":{
-         "callback":"testFileUploadFormCallback",
+      "delete/token/%token":{
+         "callback":"expireAccessToken",
          "content-type":"application/json"
-      },
-      "test/oauth":{
-         "callback":"testOAuth",
-         "content-type":"application/json"
-      },
-      "test/any":{
-         "callback":"testAny",
-         "content-type":"application/json",
-         "access":"is_authenticated"
       }
     }
 }

@@ -176,29 +176,7 @@ class TestModule extends Module {
 		
     public function testFunctionOne() {
 
-		$api = $this->loadForceApi();
 
-		$query = "SELECT Id, Name FROM Contact";
-
-		$resp = $api->query($query);
-
-		if(!$resp->isSUccess()){
-
-			$config = getOAuthConfig($this->getInfo()["connectedApp"]);
-			$req = OAuthRequest::refreshAccessTokenRequest($config, "webserver");
-			$resp2= $req->authorize();
-
-			$body = json_decode($resp2->getBody(), true);
-
-			\Session::set($config->getName(), "webserver", "access_token", $body["access_token"]);
-
-			var_dump($resp, $body, $_SESSION);exit;
-
-		}
-
-		var_dump($resp,$req, $_SESSION);
-
-		exit;
     }
 
 
@@ -338,10 +316,58 @@ class TestModule extends Module {
 		exit;
 	}
 
-	public function testOauth(){
+	public function showContacts(){
 
-		print "Hello from the test module";
+		$resp = $this->getContacts();
 
-		exit;
+		if(!$resp->success()){
+
+			if($resp->getErrorCode() == "INVALID_SESSION_ID"){
+
+				$config = get_oauth_config($this->getInfo()["connectedApp"]);
+				$req = OAuthRequest::refreshAccessTokenRequest($config, "webserver");
+				$oauthResp = $req->authorize();
+	
+				$accessToken = json_decode($oauthResp->getBody(), true)["access_token"];
+	
+				\Session::set($config->getName(), "webserver", "access_token", $accessToken);
+				
+				$message = "ACCESS TOKEN WAS REFRESHED";
+
+			} else {
+
+				throw new Exception($resp->getErrorMessage());
+			}
+		} else {
+
+			$message = "ACCESS TOKEN WAS NOT REFRESHED";
+		}
+
+		$contacts = $this->getContacts()->getRecords();
+
+		$tpl = new Template("contact");
+		$tpl->addPath(__DIR__ . "/templates");
+
+		return $tpl->render(array("contacts" => $contacts, "message" => $message));
+	}
+
+	public function getContacts(){
+
+		$api = $this->loadForceApi();
+
+		$query = "SELECT Id, Name FROM Contact";
+
+		return $api->query($query);
+	}
+
+	public function expireAccessToken($token){
+
+		$url = "https://login.salesforce.com/services/oauth2/revoke?token=$token";
+
+		$req = new HttpRequest($url);
+
+		$resp = $req->send();
+
+		var_dump($resp);exit;
 	}
 }
