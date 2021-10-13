@@ -176,6 +176,7 @@ class TestModule extends Module {
 		
     public function testFunctionOne() {
 
+		return "Test function one.";
 
     }
 

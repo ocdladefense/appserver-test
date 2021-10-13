@@ -6,16 +6,6 @@
    "connectedApp":"default",
 	"files": ["Test.php"],
 	"routes": {
-      "login": {
-         "callback":"login",
-         "content-type":"text/html",
-         "access": true
-      },
-      "logout": {
-         "callback":"login",
-         "content-type":"text/html",
-         "access": true
-      },
       "user/profile": {
          "callback":"userProfile",
          "content-type":"text/html",
@@ -38,9 +28,7 @@
       },
       "test/1":{
          "callback":"testFunctionOne",
-         "content-type":"text/html",
-         "access":"is_authenticated",
-         "authorization":"webserver"
+         "content-type":"text/html"
       },
       "test/2":{
          "callback":"testFunctionOne",
